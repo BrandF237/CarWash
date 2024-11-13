@@ -6,6 +6,7 @@ import com.example.Hypro_wash.services.UserService;
 import com.example.Hypro_wash.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,16 +27,22 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/authenticate")
+        @PostMapping("/authenticate")
     public String createAuthenticationToken(@RequestBody UserDTO authenticationRequest) throws Exception {
-        authenticationManager.authenticate(
+        try {
+            authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
-        );
+            );
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        final String jwt = jwtTokenUtil.generateToken(userDetails.getUsername());
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+            final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-        return jwt;
+            return jwt;
+        } catch (BadCredentialsException e) {
+            throw new Exception("INVALID_CREDENTIALS", e);
+        } catch (Exception e) {
+            throw new Exception("AUTHENTICATION_FAILED", e);
+        }
     }
 
     @PostMapping("/register")

@@ -1,3 +1,5 @@
+package com.example.Hypro_wash.models;
+
 import jakarta.persistence.*;
 import lombok.Data;
 

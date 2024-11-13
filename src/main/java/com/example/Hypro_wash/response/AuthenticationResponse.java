@@ -1,6 +1,12 @@
 package com.example.Hypro_wash.response;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+@Data
+@Getter @Setter
 public class AuthenticationResponse {
-    public AuthenticationResponse(String jwt) {
-    }
+    private final String jwt;
+
 }
