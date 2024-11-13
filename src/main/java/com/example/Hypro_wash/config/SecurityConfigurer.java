@@ -4,6 +4,7 @@ import com.example.Hypro_wash.filters.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -20,17 +21,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfigurer {
 
-    @Autowired
-    private UserDetailsService myUserDetailsService;
+
+    private final UserDetailsService myUserDetailsService;
+    private final JwtRequestFilter jwtRequestFilter;
+
 
     @Autowired
-    private JwtRequestFilter jwtRequestFilter;
-
+    public SecurityConfigurer(UserDetailsService myUserDetailsService, JwtRequestFilter jwtRequestFilter) {
+        this.myUserDetailsService = myUserDetailsService;
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
     /**
      * Configuration de l'AuthenticationManagerBuilder avec le UserDetailsService personnalisé.
      */
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureGlobal(@Lazy AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder());
     }
 

@@ -1,7 +1,7 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/hypro_wash
-    username: postgresql
+    username: postgres
     password: lereve
     driver-class-name: org.postgresql.Driver
   jpa:
@@ -11,4 +11,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  secret: yourSecretKey
+  expirationMs: 86400000
 
